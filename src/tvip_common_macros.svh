@@ -13,22 +13,11 @@
 //  See the License for the specific language governing permissions and
 //  limitations under the License.
 //------------------------------------------------------------------------------
-`ifndef TVIP_COMMON_PKG_SV
-`define TVIP_COMMON_PKG_SV
+`ifndef TVIP_COMMON_MACROS_SVH
+`define TVIP_COMMON_MACROS_SVH
 
-`include  "tvip_common_macros.svh"
+`ifndef TVIP_TIME_PRECISION
+  `define TVIP_TIME_PRECISION 1ps
+`endif
 
-`include  "tvip_clock_if.sv"
-`include  "tvip_reset_if.sv"
-
-package tvip_common_pkg;
-  import  uvm_pkg::*;
-  import  tue_pkg::*;
-
-  `include  "uvm_macros.svh"
-  `include  "tue_macros.svh"
-
-  `include  "tvip_common_types.svh"
-  `include  "tvip_common_item.svh"
-endpackage
 `endif

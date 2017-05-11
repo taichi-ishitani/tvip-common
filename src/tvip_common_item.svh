@@ -13,22 +13,26 @@
 //  See the License for the specific language governing permissions and
 //  limitations under the License.
 //------------------------------------------------------------------------------
-`ifndef TVIP_COMMON_PKG_SV
-`define TVIP_COMMON_PKG_SV
+`ifndef TVIP_COMMON_ITEM_SVH
+`define TVIP_COMMON_ITEM_SVH
+class tvip_common_item #(
+  type  CONFIGURATION = tue_configuration_dummy,
+  type  STATUS        = tue_status_dummy
+) extends tue_sequence_item #(CONFIGURATION, STATUS);
+  rand  int ipg;
 
-`include  "tvip_common_macros.svh"
+  constraint c_valid_ipg {
+    ipg >= -1;
+  }
 
-`include  "tvip_clock_if.sv"
-`include  "tvip_reset_if.sv"
+  constraint c_default_ipg {
+    soft ipg == -1;
+  }
 
-package tvip_common_pkg;
-  import  uvm_pkg::*;
-  import  tue_pkg::*;
+  function int get_ipg();
+    return (ipg >= 0) ? ipg : 0;
+  endfunction
 
-  `include  "uvm_macros.svh"
-  `include  "tue_macros.svh"
-
-  `include  "tvip_common_types.svh"
-  `include  "tvip_common_item.svh"
-endpackage
+  `tue_object_default_constructor(tvip_common_item)
+endclass
 `endif

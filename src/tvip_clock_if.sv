@@ -13,22 +13,43 @@
 //  See the License for the specific language governing permissions and
 //  limitations under the License.
 //------------------------------------------------------------------------------
-`ifndef TVIP_COMMON_PKG_SV
-`define TVIP_COMMON_PKG_SV
+`ifndef TVIP_CLOCK_IF_SV
+`define TVIP_CLOCK_IF_SV
 
 `include  "tvip_common_macros.svh"
 
-`include  "tvip_clock_if.sv"
-`include  "tvip_reset_if.sv"
+interface tvip_clock_if ();
+  timeunit      1ns;
+  timeprecision `TVIP_TIME_PRECISION;
 
-package tvip_common_pkg;
-  import  uvm_pkg::*;
-  import  tue_pkg::*;
+  bit       started     = 0;
+  realtime  half_period = 0ns;
+  bit       clk         = 0;
+  bit       clk_p;
+  bit       clk_n;
 
-  `include  "uvm_macros.svh"
-  `include  "tue_macros.svh"
+  assign  clk_p =  clk;
+  assign  clk_n = ~clk;
 
-  `include  "tvip_common_types.svh"
-  `include  "tvip_common_item.svh"
-endpackage
+  always @(posedge started) begin
+    while (started) begin
+      #(half_period);
+      clk ^= 1;
+    end
+  end
+
+  function automatic void start(realtime period_ns);
+    set_period(period_ns);
+    started = 1;
+  endfunction
+
+  function automatic void set_period(realtime period_ns);
+    half_period = period_ns / 2.0;
+  endfunction
+
+  function automatic void stop();
+    half_period = 0ns;
+    started     = 0;
+  endfunction
+endinterface
 `endif

@@ -13,22 +13,24 @@
 //  See the License for the specific language governing permissions and
 //  limitations under the License.
 //------------------------------------------------------------------------------
-`ifndef TVIP_COMMON_PKG_SV
-`define TVIP_COMMON_PKG_SV
+`ifndef TVIP_RESET_IF_SV
+`define TVIP_RESET_IF_SV
 
 `include  "tvip_common_macros.svh"
 
-`include  "tvip_clock_if.sv"
-`include  "tvip_reset_if.sv"
+interface tvip_reset_if ();
+  timeunit      1ns;
+  timeprecision `TVIP_TIME_PRECISION;
 
-package tvip_common_pkg;
-  import  uvm_pkg::*;
-  import  tue_pkg::*;
+  bit reset = 0;
+  bit reset_n;
 
-  `include  "uvm_macros.svh"
-  `include  "tue_macros.svh"
+  assign  reset_n = ~reset;
 
-  `include  "tvip_common_types.svh"
-  `include  "tvip_common_item.svh"
-endpackage
+  task automatic initiate(realtime duration_ns);
+    reset = 1;
+    #(duration_ns);
+    reset = 0;
+  endtask
+endinterface
 `endif
