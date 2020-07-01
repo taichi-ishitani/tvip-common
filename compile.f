@@ -1,2 +1,2 @@
-+incdir+${TVIP_HOME}/tvip_common/src
-${TVIP_HOME}/tvip_common/src/tvip_common_pkg.sv
++incdir+${TVIP_COMMON_HOME}/src
+${TVIP_COMMON_HOME}/src/tvip_common_pkg.sv
