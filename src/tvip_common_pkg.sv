@@ -31,5 +31,6 @@ package tvip_common_pkg;
   `include  "tvip_common_types.svh"
   `include  "tvip_common_item.svh"
   `include  "tvip_delay_configuration.svh"
+  `include  "tvip_memory.svh"
 endpackage
 `endif
