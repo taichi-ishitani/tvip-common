@@ -18,7 +18,7 @@
 
 `include  "tvip_common_macros.svh"
 
-interface tvip_reset_if (input clk);
+interface tvip_reset_if (input bit i_clk);
   timeunit      1ns;
   timeprecision `TVIP_TIME_PRECISION;
 
@@ -27,17 +27,16 @@ interface tvip_reset_if (input clk);
 
   assign  reset_n = ~reset;
 
-  task automatic initiate(realtime duration_ns);
+  task automatic initiate(realtime duration_ns,
+                          bit release_synchronous = 0);
     reset = 1;
     #(duration_ns);
+    if (release_synchronous) begin
+    @(posedge i_clk);
+    end
     reset = 0;
   endtask
 
-  task automatic initiate_synchro(realtime duration_ns);
-    reset = 1;
-    #(duration_ns);
-    @(posedge clk);
-    reset = 0;
-  endtask
+
 endinterface
 `endif
