@@ -38,7 +38,5 @@ interface tvip_reset_if (input bit i_clk);
     end
     reset = 0;
   endtask
-
-
 endinterface
 `endif
