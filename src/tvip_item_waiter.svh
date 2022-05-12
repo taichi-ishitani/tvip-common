@@ -24,6 +24,7 @@ class tvip_item_waiter #(
 
   function void write(ITEM t);
     ID  id;
+    int size;
 
     foreach (waiters[i]) begin
       waiters[i].trigger(t);
@@ -35,7 +36,8 @@ class tvip_item_waiter #(
       return;
     end
 
-    foreach (id_waiters[id][i]) begin
+    size  = id_waiters[id].size();
+    for (int i = 0;i < size;++i) begin
       id_waiters[id][i].trigger(t);
     end
     id_waiters.delete(id);
