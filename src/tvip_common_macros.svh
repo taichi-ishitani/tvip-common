@@ -20,23 +20,28 @@
   `define TVIP_TIME_PRECISION 1ps
 `endif
 
+`define tvip_inside(VARIABLE, MIN, MAX) \
+((VARIABLE >= MIN) && (VARIABLE <= MAX))
+
 `define tvip_delay_constraint(DELAY, CONFIGURATION) \
 if (CONFIGURATION.max_delay > CONFIGURATION.min_delay) { \
-  (DELAY inside {[CONFIGURATION.min_delay:CONFIGURATION.mid_delay[0]]}) || \
-  (DELAY inside {[CONFIGURATION.mid_delay[1]:CONFIGURATION.max_delay]}); \
-  if (CONFIGURATION.min_delay == 0) { \
-    DELAY dist { \
-      0                                                       := CONFIGURATION.weight_zero_delay, \
-      [1                         :CONFIGURATION.mid_delay[0]] :/ CONFIGURATION.weight_short_delay, \
-      [CONFIGURATION.mid_delay[1]:CONFIGURATION.max_delay   ] :/ CONFIGURATION.weight_long_delay \
-    }; \
-  } \
-  else { \
-    DELAY dist { \
-      [CONFIGURATION.min_delay   :CONFIGURATION.mid_delay[0]] :/ CONFIGURATION.weight_short_delay, \
-      [CONFIGURATION.mid_delay[1]:CONFIGURATION.max_delay   ] :/ CONFIGURATION.weight_long_delay \
-    }; \
-  } \
+  `tvip_inside(DELAY, CONFIGURATION.min_delay, CONFIGURATION.mid_delay[0]) || \
+  `tvip_inside(DELAY, CONFIGURATION.mid_delay[1], CONFIGURATION.max_delay); \
+  `ifndef VIVADO \
+    if (CONFIGURATION.min_delay == 0) { \
+      DELAY dist { \
+        0                                                       := CONFIGURATION.weight_zero_delay, \
+        [1                         :CONFIGURATION.mid_delay[0]] :/ CONFIGURATION.weight_short_delay, \
+        [CONFIGURATION.mid_delay[1]:CONFIGURATION.max_delay   ] :/ CONFIGURATION.weight_long_delay \
+      }; \
+    } \
+    else { \
+      DELAY dist { \
+        [CONFIGURATION.min_delay   :CONFIGURATION.mid_delay[0]] :/ CONFIGURATION.weight_short_delay, \
+        [CONFIGURATION.mid_delay[1]:CONFIGURATION.max_delay   ] :/ CONFIGURATION.weight_long_delay \
+      }; \
+    } \
+  `endif \
 } \
 else { \
   DELAY == CONFIGURATION.min_delay; \
