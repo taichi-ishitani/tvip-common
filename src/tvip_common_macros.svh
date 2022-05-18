@@ -27,7 +27,7 @@
 if (CONFIGURATION.max_delay > CONFIGURATION.min_delay) { \
   `tvip_inside(DELAY, CONFIGURATION.min_delay, CONFIGURATION.mid_delay[0]) || \
   `tvip_inside(DELAY, CONFIGURATION.mid_delay[1], CONFIGURATION.max_delay); \
-  `ifndef VIVADO \
+  `ifndef XILINX_SIMULATOR \
     if (CONFIGURATION.min_delay == 0) { \
       DELAY dist { \
         0                                                       := CONFIGURATION.weight_zero_delay, \
