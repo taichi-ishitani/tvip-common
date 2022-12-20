@@ -33,8 +33,8 @@ interface tvip_clock_if ();
 
   always @(posedge started) begin
     while (started) begin
-      #(half_period);
       clk ^= 1;
+      #(half_period);
     end
   end
 
