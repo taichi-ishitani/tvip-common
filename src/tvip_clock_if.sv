@@ -51,5 +51,11 @@ interface tvip_clock_if ();
     half_period = 0ns;
     started     = 0;
   endfunction
+
+  task automatic wait_cycles(int cycles);
+    repeat (cycles) begin
+      @(posedge clk);
+    end
+  endtask
 endinterface
 `endif
