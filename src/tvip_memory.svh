@@ -48,7 +48,9 @@ class tvip_memory #(
     for (int i = 0;i < byte_size;++i) begin
       memory_address          = start_address + i;
       byte_index              = memory_address % byte_width;
-      memory[memory_address]  = data[8*byte_index+:8];
+      if (strobe[i]) begin
+        memory[memory_address]  = data[8*byte_index+:8];
+      end
     end
   endfunction
 
